@@ -1,0 +1,26 @@
+web:
+  build: .
+  dockerfile: .dockerfile
+  # command: gunicorn -b 0.0.0.0:80 space.wsgi:application
+  command: python wagtaildemo/manage.py runserver 0.0.0.0:80
+  volumes:
+    - ./:/usr/src/app
+  links:
+   - postgres
+   # - elasticsearch
+  ports:
+   - "80:80"
+  environment:
+    - DEBUG=True
+    - DEV=True
+    - DATABASE_URL=postgres://postgres:@postgres:5432/postgres
+    - ELASTICSEARCH_URL=http://elasticsearch:9200
+    - SECRET_KEY=notasecret
+postgres:
+  image: postgres
+  ports:
+   - "5432:5432"
+# elasticsearch:
+#   image: orchardup/elasticsearch
+#   ports:
+    # - "9200:9200"
